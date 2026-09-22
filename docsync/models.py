@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class FunctionInfo(BaseModel):
@@ -8,7 +8,15 @@ class FunctionInfo(BaseModel):
     line_number: int
 
 
+class ClassInfo(BaseModel):
+    name: str
+    docstring: str | None = None
+    line_number: int
+    methods: list[FunctionInfo] = Field(default_factory=list)
+
+
 class ModuleInfo(BaseModel):
     name: str
     file_path: str
     functions: list[FunctionInfo]
+    classes: list[ClassInfo] = Field(default_factory=list)

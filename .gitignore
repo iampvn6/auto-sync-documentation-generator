@@ -5,4 +5,4 @@ __pycache__/
 .ruff_cache/
 coverage.xml
 htmlcov/
-.env
+.env.kilo/

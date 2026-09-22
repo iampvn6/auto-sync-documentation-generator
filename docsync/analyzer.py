@@ -1,7 +1,7 @@
 import ast
 from pathlib import Path
 
-from docsync.models import FunctionInfo, ModuleInfo
+from docsync.models import ClassInfo, FunctionInfo, ModuleInfo
 
 
 def annotation_to_string(annotation: ast.expr | None) -> str:
@@ -86,6 +86,7 @@ def analyze_python_file(file_path: str | Path) -> ModuleInfo:
     tree = ast.parse(path.read_text(encoding="utf-8"))
 
     functions = []
+    classes = []
 
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -101,8 +102,37 @@ def analyze_python_file(file_path: str | Path) -> ModuleInfo:
                 )
             )
 
+        elif isinstance(node, ast.ClassDef):
+            if node.name.startswith("_"):
+                continue
+
+            methods = []
+
+            for item in node.body:
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    if item.name.startswith("_"):
+                        continue
+
+                    methods.append(
+                        FunctionInfo(
+                            name=item.name,
+                            signature=build_signature(item),
+                            docstring=ast.get_docstring(item),
+                            line_number=item.lineno,
+                        )
+                    )
+
+            classes.append(
+                ClassInfo(
+                    name=node.name,
+                    docstring=ast.get_docstring(node),
+                    line_number=node.lineno,
+                    methods=methods,
+                )
+            )
     return ModuleInfo(
         name=path.stem,
         file_path=str(path),
         functions=functions,
+        classes=classes,
     )
