@@ -15,7 +15,8 @@ def test_analyze_python_file():
         == "add(first_number: int, second_number: int, tax: int = 0) -> int"
     )
     assert add_function.docstring == "Return the sum of two numbers and optional tax."
-    
+
+
 def test_analyzer_includes_default_values():
     module = analyze_python_file("examples/sample_app/calculator.py")
 

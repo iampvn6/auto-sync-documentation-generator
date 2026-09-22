@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from docsync.analyzer import analyze_python_file
-from docsync.generator import save_module_documentation
 from docsync.drift_checker import check_documentation_drift
+from docsync.generator import save_module_documentation
 
 app = FastAPI(
     title="DocSync API",
@@ -55,7 +55,8 @@ def generate_documentation(request: ScanRequest) -> dict:
         "module": module.name,
         "documentation_file": str(documentation_file),
     }
-    
+
+
 @app.post("/check-drift")
 def check_drift(request: ScanRequest) -> dict:
     path = Path(request.file_path)
