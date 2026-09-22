@@ -1,0 +1,17 @@
+# API Reference: `{{ module.name }}`
+
+<!-- DOCSYNC:START -->
+
+## Functions
+
+{% for function in module.functions %}
+### `{{ function.name }}`
+
+```python
+{{ function.signature }}
+```
+
+{{ function.docstring or "No documentation provided." }}
+
+{% endfor %}
+<!-- DOCSYNC:END -->
