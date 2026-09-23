@@ -1,0 +1,22 @@
+source_dirs:
+  - examples
+docs_dir: docs/api
+exclude:
+  - tests
+  - .venv
+  - __pycache__
+fail_on_drift: true
+source_dirs:
+  - examples
+docs_dir: docs/api
+exclude:
+  - tests
+  - .venv
+  - __pycache__
+fail_on_drift: true
+ai:
+  enabled: true
+  provider: ollama
+  model: llama3.2
+  base_url: http://localhost:11434/v1
+  api_key: ""

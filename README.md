@@ -1,20 +1,25 @@
 # Auto-Sync Documentation Generator (DocSync)
 
-DocSync is a Python developer tool that detects documentation drift when Python code changes and generates updated Markdown API references.
+DocSync is a Python developer tool that detects **documentation drift** when Python code changes and generates updated Markdown API references.
 
-It uses Python's Abstract Syntax Tree (AST) to inspect function signatures, type annotations, default values, and docstrings without executing application code. A FastAPI backend and command-line interface expose the same functionality for local development and automation.
+
+It uses Python's Abstract Syntax Tree (AST) to inspect function signatures, type annotations, default values, decorators, classes, methods, and docstrings — **without executing application code**. A FastAPI backend and a command-line interface expose the same functionality for local development and CI automation.
+
 
 ## Features
 
-- Analyzes Python functions using the built-in `ast` module
-- Extracts function signatures, type annotations, default values, and docstrings
-- Generates Markdown API documentation with Jinja2 templates
-- Detects when committed documentation no longer matches source code
-- Provides CLI commands to generate and check documentation
-- Provides FastAPI endpoints for scanning, generation, and drift checking
-- Includes automated tests with Pytest
+- AST-based analysis of functions, async functions, classes, methods, decorators, defaults, `*args`/`**kwargs`, annotations, and docstrings
+- Markdown API documentation via Jinja2 — manual notes outside `DOCSYNC:START`/`DOCSYNC:END` markers are preserved
+- Documentation drift detection (compares the generated section against committed docs)
+- Git changed-file detection for PRs (`git diff main...HEAD`)
+- Project configuration via `.docsync.yml`
+- CLI commands: `generate`, `check`, and `check --base main`
+- FastAPI endpoints: `/health`, `/scan`, `/generate-docs`, `/check-drift`, `/reports`, `/reports/{id}`
+- SQLite scan history
+- CI via GitHub Actions (pytest, ruff, black)
 
 ## Tech Stack
+- Python 3.12 · FastAPI + Uvicorn · Pydantic · Jinja2 · Python AST · Typer · SQLite (stdlib) · Pytest · Ruff + Black · GitHub Actions
 
 - Python 3.12
 - FastAPI and Uvicorn
@@ -22,19 +27,30 @@ It uses Python's Abstract Syntax Tree (AST) to inspect function signatures, type
 - Jinja2
 - Python AST
 - Typer
+- SQLite (stdlib)
 - Pytest
 - Ruff and Black
+- Github Actions
 
 ## Project Structure
 
 ```text
 docsync/
-├── docsync/                 # Application source code
-├── docs/api/                # Generated Markdown API references
-├── examples/sample_app/     # Example Python module
-├── templates/               # Jinja2 documentation templates
-├── tests/                   # Automated tests
-└── pyproject.toml           # Tool configuration
+├── docsync/
+│   ├── analyzer.py       # AST code analysis
+│   ├── models.py         # Pydantic models
+│   ├── generator.py      # Markdown generation (marker-preserving)
+│   ├── drift_checker.py  # Documentation drift detection
+│   ├── git_diff.py       # Changed-file detection vs. a base branch
+│   ├── config.py         # .docsync.yml loader
+│   ├── database.py       # SQLite scan history
+│   ├── api.py            # FastAPI application
+│   └── cli.py            # Typer CLI
+├── docs/api/             # Generated Markdown references
+├── templates/
+├── examples/sample_app/
+├── tests/
+└── .github/workflows/quality.yml
 ```
 
 ## Setup
@@ -47,6 +63,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 pip install fastapi "uvicorn[standard]" typer jinja2 pydantic pytest ruff black pyyaml httpx
+
+##
 ```
 
 ## Generate Documentation

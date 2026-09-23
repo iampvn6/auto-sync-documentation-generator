@@ -11,6 +11,16 @@ def annotation_to_string(annotation: ast.expr | None) -> str:
     return ast.unparse(annotation)
 
 
+def decorator_names(
+    node: ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef,
+) -> list[str]:
+    """Return decorator expressions as strings, e.g. ['require_auth', 'lru_cache(maxsize=128)']."""
+    return [
+        decorator.id if isinstance(decorator, ast.Name) else ast.unparse(decorator)
+        for decorator in node.decorator_list
+    ]
+
+
 def build_signature(node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
     parameters = []
 
@@ -99,6 +109,7 @@ def analyze_python_file(file_path: str | Path) -> ModuleInfo:
                     signature=build_signature(node),
                     docstring=ast.get_docstring(node),
                     line_number=node.lineno,
+                    decorators=decorator_names(node),
                 )
             )
 
@@ -119,6 +130,7 @@ def analyze_python_file(file_path: str | Path) -> ModuleInfo:
                             signature=build_signature(item),
                             docstring=ast.get_docstring(item),
                             line_number=item.lineno,
+                            decorators=decorator_names(item),
                         )
                     )
 
@@ -128,6 +140,7 @@ def analyze_python_file(file_path: str | Path) -> ModuleInfo:
                     docstring=ast.get_docstring(node),
                     line_number=node.lineno,
                     methods=methods,
+                    decorators=decorator_names(node),
                 )
             )
     return ModuleInfo(

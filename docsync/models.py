@@ -6,6 +6,7 @@ class FunctionInfo(BaseModel):
     signature: str
     docstring: str | None = None
     line_number: int
+    decorators: list[str] = Field(default_factory=list)
 
 
 class ClassInfo(BaseModel):
@@ -13,6 +14,7 @@ class ClassInfo(BaseModel):
     docstring: str | None = None
     line_number: int
     methods: list[FunctionInfo] = Field(default_factory=list)
+    decorators: list[str] = Field(default_factory=list)
 
 
 class ModuleInfo(BaseModel):
