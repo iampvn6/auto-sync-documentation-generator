@@ -17,6 +17,17 @@ async def create_user(name: str, active: bool = True) -> dict:
     return {"name": name, "active": active}
 
 
+def delete_user(user_id: int) -> bool:
+    """Delete a user account."""
+    return True
+
+
+@cached
+def list_users(self, limit: int = 10) -> list[dict]:
+    """List user accounts."""
+    return []
+
+
 class UserService:
     """Manage user records."""
 

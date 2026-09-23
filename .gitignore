@@ -7,3 +7,6 @@ coverage.xml
 htmlcov/
 .env.kilo/
 docsync.db
+
+.coverage
+.kilo/

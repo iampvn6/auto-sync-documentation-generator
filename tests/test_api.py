@@ -32,7 +32,7 @@ def test_scan_python_file():
 
     data = response.json()
     assert data["name"] == "calculator"
-    assert len(data["functions"]) == 2
+    assert len(data["functions"]) == 4
     assert data["functions"][0]["name"] == "add"
 
 

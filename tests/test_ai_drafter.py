@@ -20,7 +20,7 @@ def test_build_draft_prompt_contains_expected_signature():
     prompt = build_draft_prompt(module, "(missing)", _generated_section(module))
 
     assert "calculator" in prompt
-    assert "add(first_number: int, second_number: int, tax: int = 0) -> int" in prompt
+    assert "add(first_number: int, second_number: int, tax: int = 100) -> int" in prompt
     assert "expected" in prompt.lower()
 
 

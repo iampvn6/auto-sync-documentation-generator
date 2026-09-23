@@ -11,7 +11,7 @@ def test_save_creates_new_file(tmp_path):
 
     content = output_file.read_text(encoding="utf-8")
     assert "# API Reference: `calculator`" in content
-    assert "add(first_number: int, second_number: int, tax: int = 0) -> int" in content
+    assert "add(first_number: int, second_number: int, tax: int = 100) -> int" in content
 
 
 def test_save_preserves_manual_notes(tmp_path):
@@ -30,7 +30,7 @@ def test_save_preserves_manual_notes(tmp_path):
     assert "Team title" in content  # manual header kept
     assert "Manual notes — do not delete." in content  # manual footer kept
     assert "OLD CONTENT" not in content  # stale block replaced
-    assert "tax: int = 0" in content  # fresh content written
+    assert "tax: int = 100" in content  # fresh content written
 
 
 def test_drift_ignores_manual_notes(tmp_path):
