@@ -11,7 +11,9 @@ def test_save_creates_new_file(tmp_path):
 
     content = output_file.read_text(encoding="utf-8")
     assert "# API Reference: `calculator`" in content
-    assert "add(first_number: int, second_number: int, tax: int = 100) -> int" in content
+    assert (
+        "add(first_number: int, second_number: int, tax: int = 100) -> int" in content
+    )
 
 
 def test_save_preserves_manual_notes(tmp_path):
