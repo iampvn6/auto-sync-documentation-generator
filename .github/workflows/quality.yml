@@ -28,7 +28,7 @@ jobs:
           pytest ruff black pyyaml httpx
 
       - name: Run tests
-        run: pytests
+        run: pytest
 
       - name: Run linter
         run: ruff check .
